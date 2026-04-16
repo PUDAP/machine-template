@@ -10,9 +10,7 @@ import sys
 import time
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from puda_comms import EdgeNatsClient, EdgeRunner
-
-# TODO: Import your machine driver here
-# from driver import Driver
+from driver import Driver
 
 
 # Configure logging
@@ -56,7 +54,7 @@ async def main():
     logger.info("Full config: %s", config.model_dump())
 
     logger.info("Initializing machine driver")
-    driver = None  # TODO: replace with actual driver instance
+    driver = Driver()
     logger.info("Machine driver initialized successfully")
 
     logger.info("Connecting to NATS at %s", config.nats_servers)
@@ -67,6 +65,7 @@ async def main():
 
     async def telemetry_handler():
         await edge_nats_client.publish_heartbeat()
+        await edge_nats_client.publish_position(driver.get_position())
         await edge_nats_client.publish_health({"cpu": 45.2, "mem": 60.1, "temp": 35.0})
 
     runner = EdgeRunner(
