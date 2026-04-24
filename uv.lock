@@ -28,7 +28,7 @@ version = "0.1.0"
 source = { virtual = "edge" }
 dependencies = [
     { name = "driver" },
-    { name = "puda-comms" },
+    { name = "puda-python" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "python-dotenv" },
@@ -39,7 +39,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "driver", editable = "driver" },
-    { name = "puda-comms", specifier = "==0.0.13" },
+    { name = "puda-python", specifier = "==0.0.15" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
@@ -57,16 +57,16 @@ wheels = [
 ]
 
 [[package]]
-name = "puda-comms"
-version = "0.0.13"
+name = "puda-python"
+version = "0.0.15"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nats-py" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/81/ef/d106c5d8006680ac61c122c642087b02b25c7edec38e132885f09cdce4f4/puda_comms-0.0.13.tar.gz", hash = "sha256:11c1c939f1f8c9af2d9010e0a4d478ca555279d15560a4071a57ed5fc1c6d6bb", size = 30938, upload-time = "2026-04-21T04:05:06.762Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3c/0c/a1785efb10439464868728582c49f99fd14a2e6cd3d468e8eb56aa6ca90d/puda_python-0.0.15.tar.gz", hash = "sha256:85154f9f86fbe1c268e636bac52d08485aa8bc3fe2336f11670a03b9ac278d59", size = 31363, upload-time = "2026-04-24T08:52:37.561Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/b7/a82a2607c7e8eb845bf438d63920b7e9bc4e79593f197fcd7464d627bf5e/puda_comms-0.0.13-py3-none-any.whl", hash = "sha256:c4f825ee4d4ba2135342b73f4d88b7a3fbc3cbcc79281feb75347df74453c98d", size = 35959, upload-time = "2026-04-21T04:05:05.041Z" },
+    { url = "https://files.pythonhosted.org/packages/4c/bf/e9241ba2922ba5290a8171dcc3fb857cfe343916f4a7d3f6ff02b32624c5/puda_python-0.0.15-py3-none-any.whl", hash = "sha256:e274ae42048d7aeed12f7f9bbfa48e42c09ab65448b2e5d13231307cd8d76854", size = 36250, upload-time = "2026-04-24T08:52:35.197Z" },
 ]
 
 [[package]]
