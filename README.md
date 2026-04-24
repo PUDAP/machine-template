@@ -24,9 +24,9 @@ machine-template/
 
 Follow these steps in order to adapt this template for a new machine.
 
-### 1. Choose a Machine ID
+### 1. Choose a unique Machine ID in your env
 
-Pick a short, lowercase, hyphen-separated identifier for the machine (e.g. `centrifuge`, `bioshake`, `thermocycler`). This becomes `MACHINE_ID` everywhere. 
+Pick a short, lowercase, hyphen-separated identifier for the machine and edit the `edge/.env` file. This becomes `MACHINE_ID` everywhere. 
 
 ### 2. Complete all TODOs
 
@@ -34,28 +34,24 @@ Search the repo for every `TODO` marker and resolve each one — typically renam
 
 ### 3. Implement the Driver
 
-Add the machine driver source under `driver/src/driver/`. The driver must expose a class that `puda_comms.EdgeRunner` can wrap. Update `driver/pyproject.toml`:
+Add the machine driver source under `driver/src/driver/driver.py`. The driver must expose a class that `puda.EdgeRunner` can wrap. Public methods should only accept primitives or standard data structures (like JSON, arrays, and tuples) rather than custom class instances.
 
-- Add required dependencies
+- Add required dependencies in `driver/pyproject.toml` if needed.
 
-### 4. Wire the Driver into main.py
+### 4. Add Driver-Specific Environment Variables
+
+In `edge/.env`, add any new config fields below `MACHINE_ID` (e.g. `${MACHINE_ID}_PORT`, `${MACHINE_ID}_HOST`). Keep `NATS_SERVERS` and `MACHINE_ID` as-is.
+
+### 5. Wire the Driver into main.py
 
 In `edge/main.py`:
 
-1. Uncomment and update the driver import line.
-2. Add any driver-specific fields to `Config` (e.g. device port, IP address).
-3. Instantiate the driver using those config fields.
-4. Remove the `driver = None` placeholder line.
-
-### 5. Add Driver-Specific Environment Variables
-
-In `edge/.env.example`, add any new config fields below `MACHINE_ID` (e.g. `${MACHINE_ID}_PORT`, `${MACHINE_ID}_HOST`). Keep `NATS_SERVERS` and `MACHINE_ID` as-is.
+1. Add any driver-specific environment variables to `Config` (e.g. device port, IP address).
+2. Instantiate the driver using those config fields.
 
 ### 6. Update the Dockerfile
 
 In `edge/Dockerfile`, uncomment the `COPY driver/` line and add any system-level dependencies your driver needs (e.g. `libusb-dev` for USB devices).
-
-
 
 Replace this file with a machine-specific README describing what the machine does, how to connect to it, and any hardware prerequisites.
 
