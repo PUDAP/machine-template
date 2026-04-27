@@ -2,12 +2,6 @@ version = 1
 revision = 3
 requires-python = ">=3.14"
 
-[manifest]
-members = [
-    "driver",
-    "edge",
-]
-
 [[package]]
 name = "annotated-types"
 version = "0.7.0"
@@ -18,16 +12,10 @@ wheels = [
 ]
 
 [[package]]
-name = "driver"
+name = "machine-template"
 version = "0.1.0"
-source = { editable = "driver" }
-
-[[package]]
-name = "edge"
-version = "0.1.0"
-source = { virtual = "edge" }
+source = { virtual = "." }
 dependencies = [
-    { name = "driver" },
     { name = "puda-python" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -38,7 +26,6 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "driver", editable = "driver" },
     { name = "puda-python", specifier = "==0.0.15" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },

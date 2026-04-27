@@ -1,23 +1,17 @@
 # machine-template
 
-Template monorepo for a PUDA machine edge service. Use this to scaffold a new machine integration.
+Template for a PUDA machine edge service. Use this to scaffold a new machine integration.
 
 ## Repo Structure
 
 ```
 machine-template/
-├── pyproject.toml          # uv workspace root (members: edge, driver)
-├── edge/
-│   ├── pyproject.toml      # Edge service package
-│   ├── main.py             # Main event loop — NATS + driver glue
-│   ├── Dockerfile          # Container build
-│   ├── compose.yml         # Docker Compose
-│   └── .env.example        # Environment variable template
-└── driver/
-    ├── pyproject.toml      # Driver package (driver)
-    ├── README.md
-    └── src/
-        └── driver/         # Source code
+├── pyproject.toml          # Python project dependencies
+├── main.py                 # Main edge service — NATS + driver instance
+├── driver.py               # Machine driver and public PUDA commands
+├── Dockerfile              # Container build
+├── compose.yml             # Docker Compose
+└── .env.example            # Environment variable template
 ```
 
 ## AI Agent Instructions
@@ -26,7 +20,7 @@ Follow these steps in order to adapt this template for a new machine.
 
 ### 1. Choose a unique Machine ID in your env
 
-Pick a short, lowercase, hyphen-separated identifier for the machine and edit the `edge/.env` file. This becomes `MACHINE_ID` everywhere. 
+Pick a short, lowercase, hyphen-separated identifier for the machine and edit the `.env` file. This becomes `MACHINE_ID` everywhere.
 
 ### 2. Complete all TODOs
 
@@ -34,24 +28,24 @@ Search the repo for every `TODO` marker and resolve each one — typically renam
 
 ### 3. Implement the Driver
 
-Add the machine driver source under `driver/src/driver/driver.py`. The driver must expose a class that `puda.EdgeRunner` can wrap. Public methods should only accept primitives or standard data structures (like JSON, arrays, and tuples) rather than custom class instances.
+Add the machine driver source in `driver.py`. The driver must expose a class that `puda.EdgeRunner` can wrap. Public methods should only accept primitives or standard data structures (like JSON, arrays, and tuples) rather than custom class instances.
 
-- Add required dependencies in `driver/pyproject.toml` if needed.
+- Add required dependencies in `pyproject.toml` if needed.
 
 ### 4. Add Driver-Specific Environment Variables
 
-In `edge/.env`, add any new config fields below `MACHINE_ID` (e.g. `${MACHINE_ID}_PORT`, `${MACHINE_ID}_HOST`). Keep `NATS_SERVERS` and `MACHINE_ID` as-is.
+In `.env`, add any new config fields below `MACHINE_ID` (e.g. `${MACHINE_ID}_PORT`, `${MACHINE_ID}_HOST`). Keep `NATS_SERVERS` and `MACHINE_ID` as-is.
 
 ### 5. Wire the Driver into main.py
 
-In `edge/main.py`:
+In `main.py`:
 
 1. Add any driver-specific environment variables to `Config` (e.g. device port, IP address).
 2. Instantiate the driver using those config fields.
 
 ### 6. Update the Dockerfile
 
-In `edge/Dockerfile`, uncomment the `COPY driver/` line and add any system-level dependencies your driver needs (e.g. `libusb-dev` for USB devices).
+In `Dockerfile`, add any system-level dependencies your driver needs (e.g. `libusb-dev` for USB devices).
 
 Replace this file with a machine-specific README describing what the machine does, how to connect to it, and any hardware prerequisites.
 
@@ -62,10 +56,10 @@ Replace this file with a machine-specific README describing what the machine doe
 From repo root:
 
 ```bash
-cp edge/.env.example edge/.env
+cp .env.example .env
 ```
 
-Edit `edge/.env` and fill in:
+Edit `.env` and fill in:
 
 - `MACHINE_ID` — machine identifier
 - `NATS_SERVERS` — comma-separated NATS server URLs
@@ -78,26 +72,26 @@ All commands below run from repo root.
 Build and start:
 
 ```bash
-docker compose -f edge/compose.yml up -d --build
+docker compose -f compose.yml up -d --build
 ```
 
 View logs:
 
 ```bash
-docker compose -f edge/compose.yml logs -f
+docker compose -f compose.yml logs -f
 ```
 
 Stop:
 
 ```bash
-docker compose -f edge/compose.yml down
+docker compose -f compose.yml down
 ```
 
 ## Run Baremetal (uv)
 
 ```bash
-uv sync --all-packages
-uv run --package edge python edge/main.py
+uv sync
+uv run python main.py
 ```
 
 ## Build and Push Image (GHCR)
@@ -111,12 +105,12 @@ echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 Build and push:
 
 ```bash
-docker compose -f edge/compose.yml build
-docker compose -f edge/compose.yml push
+docker compose -f compose.yml build
+docker compose -f compose.yml push
 ```
 
 ## Notes
 
-- Docker build context is workspace root (`..` in `edge/compose.yml`).
-- Dockerfile path is `edge/Dockerfile`.
+- Docker build context is the repository root.
+- Dockerfile path is `Dockerfile`.
 - `MACHINE_ID` in `.env` is used for NATS subject routing and Docker image/container naming.

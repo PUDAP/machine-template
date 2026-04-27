@@ -8,55 +8,59 @@ the operator should not invoke as a machine command) must be private: define the
 leading underscore (e.g. ``_poll_status``). Only public names are exposed to puda; private
 names stay internal to this driver implementation.
 
-The puda CLI maps public driver methods to ``puda machine <command> <machine_id>``. For
-example: ``puda machine home <machine_id>`` and ``puda machine reset <machine_id>``.
+Below are the public methods that are exposed to the puda CLI.
+
+- `shutdown`
+- `home`
+- `reset`
 """
+
 
 class Driver:
     def __init__(self):
         self.startup()
-    
+
     def startup(self) -> bool:
         """
         Startup the machine
-        
+
         Returns:
             bool: True if the startup was successful, False otherwise
         """
-        pass
+        return True
 
     def shutdown(self) -> bool:
         """
         Shutdown the machine. Release serial ports, sockets, cameras, etc and disconnects from NATS.
-        Used when updating the machine using `puda machine update <machine_id>`
-        
+        Used by PUDA CLI to update the machine `puda machine update <machine_id>`
+
         Returns:
             bool: True if the shutdown was successful, False otherwise
         """
-        pass
+        return True
 
     def home(self) -> bool:
         """
-        Homes the machine
-        
+        Homes the machine. Used by PUDA CLI `puda machine home <machine_id>`
+
         Returns:
             bool: True if the home was successful, False otherwise
         """
-        pass
+        return True
 
     def reset(self) -> bool:
-        """ 
-        Software reset the machine
-        
+        """
+        Software reset the machine. Used by PUDA CLI `puda machine reset <machine_id>`
+
         Returns:
             bool: True if the reset was successful, False otherwise
         """
-        pass
-      
+        return True
+
     def get_position(self):
         """
         Get the current position of the machine
-        
+
         Returns:
             dict: A dictionary containing the current position of the machine
         """
