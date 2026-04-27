@@ -10,15 +10,29 @@ names stay internal to this driver implementation.
 
 The puda CLI maps public driver methods to ``puda machine <command> <machine_id>``. For
 example: ``puda machine home <machine_id>`` and ``puda machine reset <machine_id>``.
-
-They are optional but good to implement:
-- ``home``
-- ``reset``
 """
 
 class Driver:
     def __init__(self):
-        # connection logic here
+        self.startup()
+    
+    def startup(self) -> bool:
+        """
+        Startup the machine
+        
+        Returns:
+            bool: True if the startup was successful, False otherwise
+        """
+        pass
+
+    def shutdown(self) -> bool:
+        """
+        Shutdown the machine. Release serial ports, sockets, cameras, etc and disconnects from NATS.
+        Used when updating the machine using `puda machine update <machine_id>`
+        
+        Returns:
+            bool: True if the shutdown was successful, False otherwise
+        """
         pass
 
     def home(self) -> bool:
